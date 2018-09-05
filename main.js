@@ -7,7 +7,7 @@
 let num_arr = ['zero', 'one', 'two', 'three', 'four', 'five',
               'six', 'seven', 'eight', 'nine', 'ten'];
 
-digit_string_conflict = function (n){
+digit_string_conflict = function(n) {
   return num_arr[n];
 }
 
@@ -22,7 +22,7 @@ digit_string_conflict = function (n){
 
 
 // Проблема с производительностью
-let digit_string_slow = function (n){
+let digit_string_slow = function(n) {
   let num_arr = ['zero', 'one', 'two', 'three', 'four', 'five',
                 'six', 'seven', 'eight', 'nine', 'ten'];
   return num_arr[n];
@@ -32,7 +32,7 @@ let digit_string_slow = function (n){
 // очередь возвращает функцию у которой есть доступ ко всем аргументам
 // внешней функции и тут-же ее вызываем.
 
-let digit_string_closure = (function (){
+let digit_string_closure = (function() {
   let num_arr = ['zero', 'one', 'two', 'three', 'four', 'five',
                 'six', 'seven', 'eight', 'nine', 'ten'];
   return function (n){
@@ -41,3 +41,23 @@ let digit_string_closure = (function (){
 }());
 
 console.log(digit_string_closure(4));
+
+//функция закрашивает елемент на странице в необольшом отрезке времени
+
+let color_element = function(id) {
+  let dom = document.getElementById(id);
+  level = 15
+  function step() {
+    let h = level.toString(16);
+    console.log(h);
+    dom.style.backgroundColor = "#FFFF" + h + h;
+    console.log(dom.style.backgroundColor);
+    if (level > 0){
+      level = level - 1;
+      setTimeout(step, 200);
+    }
+  }
+  setTimeout(step, 100);
+}
+
+color_element("box");
