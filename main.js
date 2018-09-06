@@ -43,6 +43,9 @@ let digit_string_closure = (function() {
 console.log(digit_string_closure(4));
 
 //функция закрашивает елемент на странице в необольшом отрезке времени
+// Идея в том что внутренняя функция step имеет доступ к елементу дом модели
+// и ее поиск елемента не приходится вызывать снова и снова, что привело бы к
+// потери производительности
 
 let color_element = function(id) {
   let dom = document.getElementById(id);
