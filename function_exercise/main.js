@@ -96,5 +96,96 @@ function limit(binary, times) {
 
 var add_ltd = limit(add, 1);
 
-console.log(add_ltd(1, 2));
-console.log(add_ltd(1, 2));
+//console.log(add_ltd(1, 2));
+//console.log(add_ltd(1, 2));
+
+
+function from(start) {
+  return function() {
+    var old = start;
+    start += 1;
+    return old;
+  };
+}
+
+// My function
+function to(generator, upto) {
+  return function(from) {
+    if(upto > 1){
+      //console.log("continue work" + upto);
+      upto -= 1;
+      return generator(from);
+    };
+    return undefined;
+  };
+}
+
+// Teacher function
+
+function toT(generator, upto){
+  return function(){
+    let value = generator();
+    if (value < upto){
+      return value;
+    }
+    return undefined;
+  }
+
+}
+
+//var index = toT(from(1), 3);
+
+function fromTo(up, end){
+  return function(){
+    return toT(from(up), end);
+  }();
+}
+
+let index = fromTo(3, 6);
+//console.log(index());
+//console.log(index());
+//console.log(index());
+
+function element(array, gen) {
+  if(gen === undefined) {
+    gen = fromTo(0, array.length);
+  }
+  return function(){
+    let index = gen();
+    if(index !== undefined){
+      return array[index];
+    }
+ };
+}
+
+//let ele = element(["a", "b", "c", "d"], fromTo(1, 3));
+let ele = element(["a", "b", "c", "d"]);
+
+//console.log(typeof ele);
+//console.log(ele());
+//console.log(ele());
+//console.log(ele());
+//console.log(ele());
+//console.log(ele());
+
+
+//Collect function
+
+function collect(gen, array) {
+  return function() {
+    value = gen();
+    if (value !==undefined){
+      array.push(value);
+    }
+    return value;
+  };
+}
+var myArray = []
+let col = collect(element(["a", "b", "c", "d"]), myArray);
+
+console.log(col());
+console.log(col());
+console.log(col());
+console.log(col());
+console.log(col());
+console.log(myArray);
