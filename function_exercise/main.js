@@ -183,9 +183,160 @@ function collect(gen, array) {
 var myArray = []
 let col = collect(element(["a", "b", "c", "d"]), myArray);
 
-console.log(col());
-console.log(col());
-console.log(col());
-console.log(col());
-console.log(col());
-console.log(myArray);
+//console.log(col());
+//console.log(col());
+//console.log(col());
+//console.log(col());
+//console.log(col());
+//console.log(myArray);
+
+// filter function
+function filter(gen, predicat) {
+  return function recur() {
+    var value = gen();
+    if (value === undefined || predicat(value)) {
+      return value;
+    }
+    return recur();
+  };
+}
+
+let fill = filter(fromTo(0, 5),
+function third(value) {
+  return (value % 3) === 0;
+});
+
+//console.log(fill());
+//console.log(fill());
+
+
+//concat function
+
+function concat(gen1, gen2){
+  return function(){
+    value = gen1();
+    if(value !== undefined) {
+      return value;
+    }
+    else {
+      value = gen2();
+    }
+    return value;
+  };
+}
+
+let con = concat(fromTo(0,3), fromTo(1,3));
+
+//console.log(con());
+
+// series generator
+
+function gensymf(series) {
+  var iter = 0;
+  return function() {
+    iter += 1
+    return series + iter;
+  };
+}
+
+// let genH = gensymf("H");
+// console.log(genH());
+// console.log(genH());
+// let genF = gensymf("F");
+// console.log(genF());
+// console.log(genF());
+
+// fibonaci function
+// big one
+function fibonaccif(first, second) {
+  num = 0;
+  return function() {
+    if (num === 0) {
+      num = 1;
+      return first;
+    }
+    if (num === 1) {
+      num = 2;
+      return second;
+    }
+
+    let val = first + second;
+    first = second;
+    second = val;
+    return val;
+  }
+}
+
+//smoll one
+
+function fibonaccifs(a, b){
+  return function () {
+    var next = a;
+    a = b;
+    b += next;
+    return next;
+  };
+}
+let fib = fibonaccifs(0, 1);
+// console.log(fib());
+// console.log(fib());
+// console.log(fib());
+// console.log(fib());
+// console.log(fib());
+// console.log(fib());
+// console.log(fib());
+// console.log(fib());
+// console.log(fib());
+// console.log(fib());
+
+// counter function - returns an object containing two functions
+
+function counter(num) {
+    return obj = {
+      up: function() {
+        num += 1;
+        return num;
+      },
+      down: function() {
+        num -= 1;
+        return num;
+      }
+  };
+}
+
+// let objectCounter = counter(10);
+// let uper = objectCounter.up;
+// let downer = objectCounter.down;
+//
+// console.log(uper());
+// console.log(uper());
+// console.log(downer());
+// console.log(uper());
+// console.log(uper());
+// console.log(uper());
+
+// revoce the invoke functions
+
+function revocable(binary){
+  let stop = 0;
+  return obj = {
+    invoke: function(num1, num2) {
+      if (stop === 0) {
+        return binary(num1, num2);
+      } else {
+        return undefined;
+      }
+    },
+    revoke: function() {
+      if (stop === 0) {
+        stop = 1;
+      }
+    }
+  };
+}
+
+var rev = revocable(add);
+let add_rev = rev.invoke;
+console.log(add_rev(5, 6));
+rev.revoke();
+console.log(add_rev(6, 8));
