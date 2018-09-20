@@ -335,8 +335,87 @@ function revocable(binary){
   };
 }
 
-var rev = revocable(add);
-let add_rev = rev.invoke;
-console.log(add_rev(5, 6));
-rev.revoke();
-console.log(add_rev(6, 8));
+// var rev = revocable(add);
+// let add_rev = rev.invoke;
+// console.log(add_rev(5, 6));
+// rev.revoke();
+// console.log(add_rev(6, 8));
+
+
+// m functions
+
+function m(value, source) {
+  return {
+    value: value,
+    source: (typeof source === 'string')
+    ? source
+    : String(value)
+  }
+}
+// console.log(m(Math.PI, "pi"));
+// console.log(typeof m);
+
+function addm(obj1, obj2) {
+  return mobj = {
+    value : obj1.value + obj2.value,
+    source: String(obj1.source) + "+" + String(obj2.source)
+  };
+}
+
+// console.log(JSON.stringify(addm(m(3), m(4, '4'))));
+// console.log(JSON.stringify(addm(m(3), m(Math.PI, 'pi'))));
+
+
+function liftm(binary, str) {
+  return function(first, second){
+    return obj = {
+      value : binary(first.value, second.value),
+      source : first.source + str + second.source
+    };
+  };
+}
+
+// var addm = liftm(add, "+");
+// console.log(JSON.stringify(addm(m(3), m(4))));
+// console.log(JSON.stringify(liftm(mul, "*")(m(3), m(4))));
+
+function liftmm(binary, str) {
+  return function(first, second){
+    return obj = {
+      value : (typeof first === 'object' && typeof second === 'object')
+      ? binary(first.value, second.value)
+      : binary(first, second),
+      source : (typeof first === 'object' && typeof second === 'object')
+      ? first.source + str + second.source
+      : first + str + second
+    };
+  };
+}
+
+// var addm = liftmm(mul, "*");
+// console.log(JSON.stringify(addm(m(3), m(4))));
+// console.log(JSON.stringify(addm(3, 5)));
+
+
+
+//function exp - evaluate simple array exp
+
+function exp(arg) {
+  return (Array.isArray(arg))
+  ? arg[0](arg[1], arg[2])
+  : arg;
+}
+
+
+//function exp performance
+function exp(arg) {
+  return (Array.isArray(arg))
+  ? arg[0](exp(arg[1]), exp(arg[2]))
+  : arg;
+}
+
+// console.log(exp([mul, 5, 11]));
+// console.log(exp(42));
+
+
+//homework
