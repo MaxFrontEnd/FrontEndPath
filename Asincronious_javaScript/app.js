@@ -1,17 +1,93 @@
-document.getElementById('button').addEventListener('click', loadData);
+// document.getElementById('button').addEventListener('click', loadData);
+//
+// function loadData() {
+//   // Create an XHR object
+//   const xhr = new XMLHttpRequest();
+//
+//   // Open
+//   xhr.open('GET', 'data.txt', true);
+//
+//   xhr.onload = function() {
+//     if(this.status === 200) {
+//       console.log(this.responseText);
+//     }
+//   }
+//
+//   xhr.send();
+// }
 
-function loadData() {
-  // Create an XHR object
+const button1 = document.getElementById('button1');
+
+button1.addEventListener('click', getJSONData);
+const button2 = document.getElementById('button2');
+
+button2.addEventListener('click', loadCustomers);
+
+function getJSONData(e) {
+  //Create XHR object
   const xhr = new XMLHttpRequest();
+    // Open
+    xhr.open('GET', 'customer.json', true);
 
-  // Open
-  xhr.open('GET', 'data.txt', true);
+    xhr.onload = function() {
+      if(this.status === 200) {
+        const customer = JSON.parse(this.responseText);
 
-  xhr.onload = function() {
-    if(this.status === 200) {
-      console.log(this.responseText);
+        const output = `
+        <ul>
+          <li>
+            ID: ${customer.id}
+          </li>
+          <li>
+            Name: ${customer.name}
+          </li>
+          <li>
+            Company: ${customer.company}
+          </li>
+          <li>
+            Phone: ${customer.phone}
+          </li>
+        </ul>`
+
+        const outputCustomer = document.getElementById('customer');
+        outputCustomer.innerHTML = output;
+
+      }
     }
+    xhr.send();
   }
 
-  xhr.send();
-}
+  // Load loadCustomers
+  function loadCustomers(e) {
+    //Create XHR object
+    const xhr = new XMLHttpRequest();
+      // Open
+      xhr.open('GET', 'customers.json', true);
+
+      xhr.onload = function() {
+        if(this.status === 200) {
+          const customers = JSON.parse(this.responseText);
+          let output = '';
+          customers.forEach(function(customer){
+            output += `
+            <ul>
+              <li>
+                ID: ${customer.id}
+              </li>
+              <li>
+                Name: ${customer.name}
+              </li>
+              <li>
+                Company: ${customer.company}
+              </li>
+              <li>
+                Phone: ${customer.phone}
+              </li>
+            </ul>`
+          });
+          const outputCustomer = document.getElementById('customer2');
+          outputCustomer.innerHTML = output;
+        }
+      }
+      xhr.send();
+    }
